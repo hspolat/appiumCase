@@ -1,0 +1,13 @@
+# Device Configurations
+platformName=Android
+automationName=UiAutomator2
+deviceName=YOUR_DEVICE_NAME
+appPackage=com.akakce.akakce
+appWaitActivity=com.akakce.*
+
+# Timeouts
+implicitWait=10
+explicitWait=20
+
+# Environment (Local or Remote)
+appiumServerUrl=YOUR_URL

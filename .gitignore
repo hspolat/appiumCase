@@ -1,0 +1,59 @@
+### --- PROJECT SPECIFIC (En Önemli Kısım) --- ###
+# Lokal konfigürasyonları gizle
+src/test/resources/config.properties
+# Log dosyalarını gizle
+*.log
+# Test raporlarını gizle
+target/
+test-output/
+
+### --- JAVA & MAVEN --- ###
+*.class
+*.bluej
+*.ctxt
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+!.mvn/wrapper/maven-wrapper.jar
+
+### --- IntelliJ IDEA --- ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### --- Eclipse --- ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### --- NetBeans --- ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### --- VS Code --- ###
+.vscode/
+
+### --- OS Specific --- ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
