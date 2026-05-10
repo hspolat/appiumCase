@@ -8,4 +8,4 @@ Feature: Akakce Mobile Automation
     And User sorts products by "En Yüksek Fiyat"
     And User clicks on the 10. product in the results
     And User clicks on Go to Product button
-#    Then User verifies that Go to Seller button is displayed
+    Then User verifies that Go to Seller button is displayed

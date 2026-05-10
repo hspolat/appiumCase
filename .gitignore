@@ -1,11 +1,15 @@
-### --- PROJECT SPECIFIC (En Önemli Kısım) --- ###
-# Lokal konfigürasyonları gizle
+
+
 src/test/resources/config.properties
-# Log dosyalarını gizle
 *.log
-# Test raporlarını gizle
+
 target/
 test-output/
+allure-results/
+allure-report/
+.allure/
+
+proje_ozeti.txt
 
 ### --- JAVA & MAVEN --- ###
 *.class
@@ -17,7 +21,6 @@ test-output/
 *.zip
 *.tar.gz
 *.rar
-
 !.mvn/wrapper/maven-wrapper.jar
 
 ### --- IntelliJ IDEA --- ###
@@ -26,10 +29,10 @@ test-output/
 *.iml
 *.ipr
 out/
-!**/src/main/**/target/
-!**/src/test/**/target/
 
-### --- Eclipse --- ###
+**/target/
+
+### --- Eclipse & NetBeans & VS Code --- ###
 .apt_generated
 .classpath
 .factorypath
@@ -37,19 +40,15 @@ out/
 .settings
 .springBeans
 .sts4-cache
-
-### --- NetBeans --- ###
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 build/
-
-### --- VS Code --- ###
 .vscode/
 
-### --- OS Specific --- ###
+### --- OS Specific (Linux & Windows) --- ###
 .DS_Store
 .DS_Store?
 ._*
@@ -57,3 +56,4 @@ build/
 .Trashes
 ehthumbs.db
 Thumbs.db
+*~

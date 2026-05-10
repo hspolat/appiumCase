@@ -3,24 +3,39 @@ package pages;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.WebElement;
+import java.util.List;
 
 public class ProductListPage extends BasePage {
+
     private final By filterButton = AppiumBy.id("com.akakce.akakce:id/filter");
-    private final By sortButton = AppiumBy.id("com.akakce.akakce:id/sortText");
-    private final By productContainer = AppiumBy.id("com.akakce.akakce:id/cell_product_layout");
-    private final By productCell = AppiumBy.id("com.akakce.akakce:id/cell_product_layout");
+    private final By sortButton   = AppiumBy.id("com.akakce.akakce:id/sortText");
+    private final By productCell  = AppiumBy.id("com.akakce.akakce:id/cellContainer");
 
     public ProductListPage(AndroidDriver driver) { super(driver); }
 
     public ProductDetailPage selectProductByIndex(int index) {
-        // setMaxSearchSwipes(10) -> 10 kereden fazla kaydırma, dur demek.
-        String scrollableExpression = "new UiScrollable(new UiSelector().scrollable(true).instance(0))" +
-                ".setMaxSearchSwipes(10)" +
-                ".scrollIntoView(new UiSelector().resourceId(\"com.akakce.akakce:id/cell_product_layout\").instance(" + (index - 1) + "))";
+        waitForVisibility(productCell);
 
-        driver.findElement(AppiumBy.androidUIAutomator(scrollableExpression)).click();
-        return new ProductDetailPage(driver);
+        int globalCount = 0;
+        int maxSwipes   = 20;
+
+        for (int swipe = 0; swipe < maxSwipes; swipe++) {
+            List<WebElement> visibleProducts = driver.findElements(productCell);
+
+            for (int i = 0; i < visibleProducts.size(); i++) {
+                int cardNumber = globalCount + i + 1;
+                if (cardNumber == index) {
+                    visibleProducts.get(i).click();
+                    return new ProductDetailPage(driver);
+                }
+            }
+
+            globalCount += visibleProducts.size();
+            swipeUp();
+        }
+
+        throw new RuntimeException(index + ". ürün bulunamadı.");
     }
 
     public FilterPage openFilter() {
