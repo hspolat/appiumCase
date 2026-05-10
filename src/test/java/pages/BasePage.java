@@ -8,6 +8,7 @@ import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.ConfigReader;
 import java.time.Duration;
 import java.util.Collections;
 
@@ -17,7 +18,7 @@ public class BasePage {
 
     public BasePage(AndroidDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(ConfigReader.getProperty("explicitWait"))));
     }
 
     protected WebElement scrollIntoViewByText(String text) {
@@ -63,41 +64,11 @@ public class BasePage {
         int endY   = (int) (size.getHeight() * 0.30);
 
         PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-
         Sequence swipe = new Sequence(finger, 1)
                 .addAction(finger.createPointerMove(Duration.ZERO,
                         PointerInput.Origin.viewport(), startX, startY))
                 .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
                 .addAction(finger.createPointerMove(Duration.ofMillis(600),
-                        PointerInput.Origin.viewport(), startX, endY))
-                .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-
-        driver.perform(Collections.singletonList(swipe));
-    }
-
-    protected void scrollUntilVisible(By locator) {
-        int maxSwipes = 5;
-        for (int i = 0; i < maxSwipes; i++) {
-            try {
-                if (driver.findElement(locator).isDisplayed()) return;
-            } catch (Exception ignored) {}
-            swipeUpSmall();
-        }
-    }
-
-    protected void swipeUpSmall() {
-        org.openqa.selenium.Dimension size = driver.manage().window().getSize();
-        int startX = size.getWidth() / 2;
-        int startY = (int) (size.getHeight() * 0.55);
-        int endY   = (int) (size.getHeight() * 0.40);
-
-        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
-
-        Sequence swipe = new Sequence(finger, 1)
-                .addAction(finger.createPointerMove(Duration.ZERO,
-                        PointerInput.Origin.viewport(), startX, startY))
-                .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
-                .addAction(finger.createPointerMove(Duration.ofMillis(400),
                         PointerInput.Origin.viewport(), startX, endY))
                 .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
 
@@ -113,16 +84,12 @@ public class BasePage {
             try {
                 WebElement element = driver.findElement(locator);
 
-                // Görünüyorsa ve ekranın makul bir bölgesindeyse dur
                 if (element.isDisplayed()) {
                     int elementCenterY = element.getLocation().getY() + (element.getSize().getHeight() / 2);
                     int screenQuarter  = screen.getHeight() / 4;
-
-                    // Ekranın %25 ile %75'i arasındaysa yeterli — kaydırma
                     if (elementCenterY > screenQuarter && elementCenterY < screenQuarter * 3) return;
                 }
 
-                // Ekranın dışında ya da kenarındaysa ortala
                 int elementCenterY = element.getLocation().getY() + (element.getSize().getHeight() / 2);
                 int diff   = elementCenterY - screenCenterY;
                 int startY = Math.max(50, Math.min(screenCenterY + diff, screen.getHeight() - 50));

@@ -39,7 +39,8 @@ public class ProductListPage extends BasePage {
     }
 
     public FilterPage openFilter() {
-        scrollIntoViewById("com.akakce.akakce:id/filter").click();
+        scrollToCenter(filterButton);
+        waitForClickability(filterButton).click();
         return new FilterPage(driver);
     }
 
