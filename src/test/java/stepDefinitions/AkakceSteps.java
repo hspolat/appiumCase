@@ -1,7 +1,6 @@
 package stepDefinitions;
 
 import io.cucumber.java.en.*;
-import utils.DriverFactory;
 import pages.*;
 import org.testng.Assert;
 
@@ -13,7 +12,7 @@ public class AkakceSteps {
 
     @Given("User opens Akakce app")
     public void user_opens_akakce_app() {
-        homePage = new HomePage(DriverFactory.driver);
+        homePage = new HomePage();
     }
 
     @When("User searches for {string}")

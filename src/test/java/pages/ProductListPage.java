@@ -1,7 +1,6 @@
 package pages;
 
 import io.appium.java_client.AppiumBy;
-import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import java.util.List;
@@ -12,7 +11,7 @@ public class ProductListPage extends BasePage {
     private final By sortButton   = AppiumBy.id("com.akakce.akakce:id/sortText");
     private final By productCell  = AppiumBy.id("com.akakce.akakce:id/cellContainer");
 
-    public ProductListPage(AndroidDriver driver) { super(driver); }
+    public ProductListPage() { super(); }
 
     public ProductDetailPage selectProductByIndex(int index) {
         waitForVisibility(productCell);
@@ -27,7 +26,7 @@ public class ProductListPage extends BasePage {
                 int cardNumber = globalCount + i + 1;
                 if (cardNumber == index) {
                     visibleProducts.get(i).click();
-                    return new ProductDetailPage(driver);
+                    return new ProductDetailPage();
                 }
             }
 
@@ -41,7 +40,7 @@ public class ProductListPage extends BasePage {
     public FilterPage openFilter() {
         scrollToCenter(filterButton);
         waitForClickability(filterButton).click();
-        return new FilterPage(driver);
+        return new FilterPage();
     }
 
     public ProductListPage sortBy(String sortType) {

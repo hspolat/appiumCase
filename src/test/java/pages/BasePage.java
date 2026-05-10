@@ -9,6 +9,7 @@ import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.ConfigReader;
+import utils.DriverFactory;
 import java.time.Duration;
 import java.util.Collections;
 
@@ -16,9 +17,10 @@ public class BasePage {
     protected AndroidDriver driver;
     protected WebDriverWait wait;
 
-    public BasePage(AndroidDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(Long.parseLong(ConfigReader.getProperty("explicitWait"))));
+    public BasePage() {
+        this.driver = DriverFactory.getDriver();
+        this.wait = new WebDriverWait(this.driver,
+                Duration.ofSeconds(Long.parseLong(ConfigReader.getProperty("explicitWait"))));
     }
 
     protected WebElement scrollIntoViewByText(String text) {
