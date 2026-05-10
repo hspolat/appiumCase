@@ -7,42 +7,38 @@ import java.net.URL;
 import java.time.Duration;
 
 public class DriverFactory {
-    public static AndroidDriver driver;
+    private static final ThreadLocal<AndroidDriver> driverThread = new ThreadLocal<>();
 
-    public static AndroidDriver initializeDriver() { // throws MalformedURLException kaldırıldı
+    public static AndroidDriver getDriver() {
+        return driverThread.get();
+    }
+
+    public static void initializeDriver() {
         UiAutomator2Options options = new UiAutomator2Options();
-
         options.setPlatformName(ConfigReader.getProperty("platformName"));
         options.setAutomationName(ConfigReader.getProperty("automationName"));
         options.setDeviceName(ConfigReader.getProperty("deviceName"));
         options.setAppPackage(ConfigReader.getProperty("appPackage"));
         options.setAppWaitActivity(ConfigReader.getProperty("appWaitActivity"));
-
         options.setNoReset(true);
         options.amend("appium:forceAppLaunch", true);
 
         try {
-            driver = new AndroidDriver(
-                    new URL(ConfigReader.getProperty("appiumServerUrl")),
-                    options
-            );
+            driverThread.set(new AndroidDriver(
+                    new URL(ConfigReader.getProperty("appiumServerUrl")), options));
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Appium Server URL'i hatalı! Lütfen config.properties dosyasını kontrol edin.", e);
+            throw new RuntimeException("Appium Server URL'i hatalı!", e);
         } catch (Exception e) {
-            throw new RuntimeException("Appium Driver başlatılamadı. Sunucunun açık olduğundan emin olun!", e);
+            throw new RuntimeException("Driver başlatılamadı!", e);
         }
 
-        // Profesyonel Yaklaşım: Implicit wait'i 0 yaparak sadece Explicit wait (WebDriverWait) hakimiyeti sağlıyoruz.
-        // Bu satırı silmek de aynıdır ama açıkça 0 yazmak "ben ne yaptığımı biliyorum" demektir.
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
-
-        return driver;
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
     }
 
     public static void quitDriver() {
-        if (driver != null) {
-            driver.quit();
-            driver = null; // Driver'ı null'a çekmek bir sonraki testin temiz başlamasını sağlar
+        if (getDriver() != null) {
+            getDriver().quit();
+            driverThread.remove();
         }
     }
 }
