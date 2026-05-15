@@ -12,14 +12,16 @@ public class ProductListPage extends BasePage {
     private final By productCell  = AppiumBy.id("com.akakce.akakce:id/cellContainer");
 
     public ProductListPage() { super(); }
-
     public ProductDetailPage selectProductByIndex(int index) {
         waitForVisibility(productCell);
-
         int globalCount = 0;
-        int maxSwipes   = 20;
+        int maxSwipes = 20;
 
-        for (int swipe = 0; swipe < maxSwipes; swipe++) {
+        org.openqa.selenium.Dimension size = driver.manage().window().getSize();
+        int startY = (int) (size.getHeight() * 0.8);
+        int endY = (int) (size.getHeight() * 0.2);
+
+        for (int swipeCount = 0; swipeCount < maxSwipes; swipeCount++) {
             List<WebElement> visibleProducts = driver.findElements(productCell);
 
             for (int i = 0; i < visibleProducts.size(); i++) {
@@ -31,7 +33,7 @@ public class ProductListPage extends BasePage {
             }
 
             globalCount += visibleProducts.size();
-            swipeUp();
+            swipe(startY, endY);
         }
 
         throw new RuntimeException(index + ". ürün bulunamadı.");
